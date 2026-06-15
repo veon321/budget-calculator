@@ -12,10 +12,11 @@ const produkty = [];
 function setBudget() {
   console.log("test");
   const budgetValue = Number(totalamount.value);
-  budgetp.innerHTML = "budget: " + budgetValue + "zł";
+  budgetp.innerHTML = "budget: " + budgetValue + "$";
   totalamount.value = "";
 }
 setBudgetButton.addEventListener("click", setBudget);
+
 function addItem() {
   const nameItem = itemName.value;
   const cost = costProduct.value;
@@ -27,9 +28,8 @@ function addItem() {
   }
   errorMessage.textContent = "";
   produkty.push({ nazwa: nameItem, cena: cost });
-  console.log(produkty);
   const newElement = document.createElement("li");
-  newElement.textContent = nameItem + " - " + cost + "zł";
+  newElement.textContent = nameItem + " - " + cost + "$";
   list.appendChild(newElement);
   itemName.value = "";
   costProduct.value = "";
