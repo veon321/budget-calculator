@@ -12,7 +12,7 @@ const produkty = [];
 function setBudget() {
   console.log("test");
   const budgetValue = Number(totalamount.value);
-  budgetp.innerHTML = "budżet: " + budgetValue + "zł";
+  budgetp.innerHTML = "budget: " + budgetValue + "zł";
   totalamount.value = "";
 }
 setBudgetButton.addEventListener("click", setBudget);
