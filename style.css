@@ -95,18 +95,3 @@ main {
   display: block;
   font-weight: 500;
 }
-
-.delete-btn {
-  background-color: #5340ff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 6px 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  background-color: #ff4d4d;
-  color: white;
-}
