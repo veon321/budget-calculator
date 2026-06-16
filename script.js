@@ -6,6 +6,7 @@ const costProduct = document.getElementById("cost");
 const checkamountbutton = document.getElementById("check-amount");
 const list = document.getElementById("list");
 const errorMessage = document.getElementById("error-message");
+const clearall = document.getElementById("clearall");
 
 const produkty = [];
 
@@ -35,3 +36,8 @@ function addItem() {
   costProduct.value = "";
 }
 checkamountbutton.addEventListener("click", addItem);
+
+function clearall() {
+  produkty = [];
+}
+clearall.addEventListener("click", clearall);
