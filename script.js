@@ -19,36 +19,42 @@ function setBudget() {
 }
 setBudgetButton.addEventListener("click", setBudget);
 
-function addItem() {
-  const nameItem = itemName.value;
-  const cost = costProduct.value;
+function validateEmpty(nameItem, cost) {
   if (nameItem === "" || cost === "") {
     errorMessage.textContent =
       "Please complete both fields before adding a product!";
     errorMessage.className = "error-text";
-    return;
+    return false;
   }
-  errorMessage.textContent = "";
-  produkty.push({ nazwa: nameItem, cena: cost });
-  const newElement = document.createElement("li");
-  const textSpan = document.createElement("span");
-  textSpan.textContent = nameItem + " - " + cost + "$";
-  newElement.appendChild(textSpan);
-  const deleteButton = document.createElement("button");
-  deleteButton.id = "detelebutton";
-  deleteButton.textContent = "X";
-  deleteButton.addEventListener("click", function () {
-    newElement.remove();
-  });
-  newElement.appendChild(deleteButton);
-  list.appendChild(newElement);
-  itemName.value = "";
-  costProduct.value = "";
-  let suma = 0;
-  produkty.forEach((produkt) => {
-    suma += Number(produkt.cena);
-  });
-  priceallp.innerHTML = "price of all products: " + suma + "$";
+  return true;
+}
+
+function addItem() {
+  const nameItem = itemName.value;
+  const cost = costProduct.value;
+  if (validateEmpty(nameItem, cost)) {
+    errorMessage.textContent = "";
+    produkty.push({ nazwa: nameItem, cena: cost });
+    const newElement = document.createElement("li");
+    const textSpan = document.createElement("span");
+    textSpan.textContent = nameItem + " - " + cost + "$";
+    newElement.appendChild(textSpan);
+    const deleteButton = document.createElement("button");
+    deleteButton.id = "detelebutton";
+    deleteButton.textContent = "X";
+    deleteButton.addEventListener("click", function () {
+      newElement.remove();
+    });
+    newElement.appendChild(deleteButton);
+    list.appendChild(newElement);
+    itemName.value = "";
+    costProduct.value = "";
+    let suma = 0;
+    produkty.forEach((produkt) => {
+      suma += Number(produkt.cena);
+    });
+    priceallp.innerHTML = "price of all products: " + suma + "$";
+  }
 }
 
 checkamountbutton.addEventListener("click", addItem);
