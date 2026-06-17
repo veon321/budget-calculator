@@ -30,11 +30,21 @@ function addItem() {
   errorMessage.textContent = "";
   produkty.push({ nazwa: nameItem, cena: cost });
   const newElement = document.createElement("li");
-  newElement.textContent = nameItem + " - " + cost + "$";
+  const textSpan = document.createElement("span");
+  textSpan.textContent = nameItem + " - " + cost + "$";
+  newElement.appendChild(textSpan);
+  const deleteButton = document.createElement("button");
+  deleteButton.id = "detelebutton";
+  deleteButton.textContent = "X";
+  deleteButton.addEventListener("click", function () {
+    newElement.remove();
+  });
+  newElement.appendChild(deleteButton);
   list.appendChild(newElement);
   itemName.value = "";
   costProduct.value = "";
 }
+
 checkamountbutton.addEventListener("click", addItem);
 
 function clearall() {
