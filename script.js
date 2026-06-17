@@ -9,7 +9,7 @@ const errorMessage = document.getElementById("error-message");
 const clearallbutton = document.getElementById("clearall");
 const priceallp = document.getElementById("priceall");
 
-let produkty = [];
+let products = [];
 
 function setBudget() {
   const budgetValue = Number(totalamount.value);
@@ -30,8 +30,8 @@ function validateEmpty(nameItem, cost) {
 
 function update() {
   let suma = 0;
-  produkty.forEach((produkt) => {
-    suma += Number(produkt.cena);
+  products.forEach((product) => {
+    suma += Number(product.cena);
   });
   priceallp.innerHTML = "price of all products: " + suma + "$";
 }
@@ -41,16 +41,16 @@ function addItem() {
   const cost = costProduct.value;
   if (!validateEmpty(nameItem, cost)) return;
   errorMessage.textContent = "";
-  const nowyProdukt = { id: Date.now(), nazwa: nameItem, cena: cost };
-  produkty.push(nowyProdukt);
+  const newProduct = { id: Date.now(), nazwa: nameItem, cena: cost };
+  products.push(newProduct);
   const newElement = document.createElement("li");
   const textSpan = document.createElement("span");
   textSpan.textContent = nameItem + " - " + cost + "$";
   newElement.appendChild(textSpan);
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
-  deleteButton.addEventListener("click", function () {
-    produkty = produkty.filter((p) => p.id !== nowyProdukt.id);
+  products.addEventListener("click", function () {
+    products = products.filter((p) => p.id !== newProduct.id);
     newElement.remove();
     update();
   });
@@ -63,7 +63,7 @@ function addItem() {
 checkamountbutton.addEventListener("click", addItem);
 
 function clearall() {
-  produkty = [];
+  products = [];
   list.innerHTML = "";
   update();
 }
