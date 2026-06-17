@@ -29,35 +29,37 @@ function validateEmpty(nameItem, cost) {
   return true;
 }
 
+function update() {
+  let suma = 0;
+  produkty.forEach((produkt) => {
+    suma += Number(produkt.cena);
+  });
+  priceallp.innerHTML = "price of all products: " + suma + "$";
+}
+
 function addItem() {
   const nameItem = itemName.value;
   const cost = costProduct.value;
-  if (validateEmpty(nameItem, cost)) {
-    errorMessage.textContent = "";
-    produkty.push({ nazwa: nameItem, cena: cost });
-    const newElement = document.createElement("li");
-    const textSpan = document.createElement("span");
-    textSpan.textContent = nameItem + " - " + cost + "$";
-    newElement.appendChild(textSpan);
-    const deleteButton = document.createElement("button");
-    deleteButton.id = "detelebutton";
-    deleteButton.textContent = "X";
-    deleteButton.addEventListener("click", function () {
-      newElement.remove();
-    });
-    newElement.appendChild(deleteButton);
-    list.appendChild(newElement);
-    itemName.value = "";
-    costProduct.value = "";
-    let suma = 0;
-    produkty.forEach((produkt) => {
-      suma += Number(produkt.cena);
-    });
-    priceallp.innerHTML = "price of all products: " + suma + "$";
-  }
+  if (validateEmpty == false) return;
+  errorMessage.textContent = "";
+  produkty.push({ nazwa: nameItem, cena: cost });
+  const newElement = document.createElement("li");
+  const textSpan = document.createElement("span");
+  textSpan.textContent = nameItem + " - " + cost + "$";
+  newElement.appendChild(textSpan);
+  const deleteButton = document.createElement("button");
+  deleteButton.id = "detelebutton";
+  deleteButton.textContent = "X";
+  deleteButton.addEventListener("click", function () {
+    newElement.remove();
+  });
+  newElement.appendChild(deleteButton);
+  list.appendChild(newElement);
+  itemName.value = "";
+  costProduct.value = "";
 }
-
 checkamountbutton.addEventListener("click", addItem);
+checkamountbutton.addEventListener("click", update);
 
 function clearall() {
   produkty = [];
