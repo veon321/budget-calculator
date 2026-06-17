@@ -60,7 +60,6 @@ function addItem() {
   costProduct.value = "";
   update();
 }
-
 checkamountbutton.addEventListener("click", addItem);
 
 function clearall() {
