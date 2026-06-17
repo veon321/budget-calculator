@@ -7,6 +7,7 @@ const checkamountbutton = document.getElementById("check-amount");
 const list = document.getElementById("list");
 const errorMessage = document.getElementById("error-message");
 const clearallbutton = document.getElementById("clearall");
+const priceallp = document.getElementById("priceall");
 
 let produkty = [];
 
@@ -43,6 +44,11 @@ function addItem() {
   list.appendChild(newElement);
   itemName.value = "";
   costProduct.value = "";
+  let suma = 0;
+  produkty.forEach((produkt) => {
+    suma += Number(produkt.cena);
+  });
+  priceallp.innerHTML = "price of all products: " + suma + "$";
 }
 
 checkamountbutton.addEventListener("click", addItem);
