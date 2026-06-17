@@ -49,7 +49,7 @@ function addItem() {
   newElement.appendChild(textSpan);
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
-  products.addEventListener("click", function () {
+  deleteButton.addEventListener("click", function () {
     products = products.filter((p) => p.id !== newProduct.id);
     newElement.remove();
     update();
