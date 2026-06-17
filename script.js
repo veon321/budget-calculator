@@ -40,7 +40,7 @@ function update() {
 function addItem() {
   const nameItem = itemName.value;
   const cost = costProduct.value;
-  if (validateEmpty == false) return;
+  if (!validateEmpty(nameItem, cost)) return;
   errorMessage.textContent = "";
   produkty.push({ nazwa: nameItem, cena: cost });
   const newElement = document.createElement("li");
