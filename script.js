@@ -36,6 +36,10 @@ function update() {
   priceallp.innerHTML = "price of all products: " + suma + "$";
 }
 
+function edit() {
+  const editInput = document.createElement("input");
+}
+
 function addItem() {
   const nameItem = itemName.value;
   const cost = costProduct.value;
@@ -47,14 +51,28 @@ function addItem() {
   const textSpan = document.createElement("span");
   textSpan.textContent = nameItem + " - " + cost + "$";
   newElement.appendChild(textSpan);
+  const actionsContainer = document.createElement("div");
+  actionsContainer.className = "expense-actions";
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
+  deleteButton.className = "delete-button";
   deleteButton.addEventListener("click", function () {
     products = products.filter((p) => p.id !== newProduct.id);
     newElement.remove();
     update();
   });
-  newElement.appendChild(deleteButton);
+  const editButton = document.createElement("button");
+  editButton.textContent = "edit";
+  editButton.className = "edit-button";
+  editButton.addEventListener("click", function () {
+    products = products.filter((p) => p.id !== newProduct.id);
+    const editInput = document.createElement("input");
+    actionsContainer.appendChild(editInput);
+    edit();
+  });
+  actionsContainer.appendChild(deleteButton);
+  actionsContainer.appendChild(editButton);
+  newElement.appendChild(actionsContainer);
   list.appendChild(newElement);
   itemName.value = "";
   costProduct.value = "";

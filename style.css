@@ -99,13 +99,6 @@ main {
   width: 100%;
 }
 
-.expense-container ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-}
-
 .expense-container li {
   display: flex;
   align-items: center;
@@ -118,23 +111,41 @@ main {
   border-radius: 8px;
 }
 
-.expense-container li button {
-  width: auto;
-  min-width: 30px;
-  height: 30px;
-  padding: 0 10px;
-  margin-left: 15px;
-  border-radius: 5px;
-  border: none;
-  background-color: rgba(51, 51, 231, 0.904);
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.expense-container ul {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 16px 0 0 0;
+  list-style: none;
 }
 
-.expense-container li button:hover {
+.expense-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.expense-container .delete-button {
   cursor: pointer;
+  background-color: rgba(51, 51, 231, 0.904);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.expense-container .delete-button:hover {
   background-color: #880505c9;
+}
+
+.expense-container .edit-button {
+  cursor: pointer;
+  background-color: rgba(51, 51, 231, 0.904);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+.expense-container .edit-button:hover {
+  background-color: rgba(75, 75, 224, 0.863);
 }
