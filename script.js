@@ -8,13 +8,15 @@ const list = document.getElementById("list");
 const errorMessage = document.getElementById("error-message");
 const clearallbutton = document.getElementById("clearall");
 const priceallp = document.getElementById("priceall");
+const budgetPercentp = document.getElementById("budget-percent");
 
 let products = [];
 
 function setBudget() {
-  const budgetValue = Number(totalamount.value);
-  budgetp.innerHTML = "budget: " + budgetValue + "$";
+  currentBudget = Number(totalamount.value);
+  budgetp.innerHTML = "budget: " + currentBudget + "$";
   totalamount.value = "";
+  update();
 }
 setBudgetButton.addEventListener("click", setBudget);
 
@@ -34,6 +36,12 @@ function update() {
     suma += Number(product.cena);
   });
   priceallp.innerHTML = "price of all products: " + suma + "$";
+  if (currentBudget > 0) {
+    const procent = (suma / currentBudget) * 100;
+    budgetPercentp.innerHTML = "Budget used: " + procent.toFixed(1) + "%";
+  } else {
+    budgetPercentp.innerHTML = "Budget used: 0%";
+  }
 }
 
 function addItem() {
