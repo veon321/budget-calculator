@@ -36,10 +36,6 @@ function update() {
   priceallp.innerHTML = "price of all products: " + suma + "$";
 }
 
-function edit(element, text) {
-  element.innerHTML = text;
-}
-
 function addItem() {
   const nameItem = itemName.value;
   const cost = costProduct.value;
