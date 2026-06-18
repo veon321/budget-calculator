@@ -11,6 +11,7 @@ const priceallp = document.getElementById("priceall");
 const budgetPercentp = document.getElementById("budget-percent");
 
 let products = [];
+let currentBudget = 0;
 
 function setBudget() {
   currentBudget = Number(totalamount.value);
@@ -33,15 +34,13 @@ function validateEmpty(nameItem, cost) {
 function update() {
   let suma = 0;
   products.forEach((product) => {
-    suma += Number(product.cena);
+    suma += product.cena;
   });
+
   priceallp.innerHTML = "price of all products: " + suma + "$";
-  if (currentBudget > 0) {
-    const procent = (suma / currentBudget) * 100;
-    budgetPercentp.innerHTML = "Budget used: " + procent.toFixed(1) + "%";
-  } else {
-    budgetPercentp.innerHTML = "Budget used: 0%";
-  }
+
+  const procent = currentBudget > 0 ? (suma / currentBudget) * 100 : 0;
+  budgetPercentp.innerHTML = "Budget used: " + procent.toFixed(1) + "%";
 }
 
 function addItem() {
@@ -49,14 +48,18 @@ function addItem() {
   const cost = costProduct.value;
   if (!validateEmpty(nameItem, cost)) return;
   errorMessage.textContent = "";
-  const newProduct = { id: Date.now(), nazwa: nameItem, cena: cost };
+
+  const newProduct = { id: Date.now(), nazwa: nameItem, cena: Number(cost) };
   products.push(newProduct);
+
   const newElement = document.createElement("li");
   const textSpan = document.createElement("span");
-  textSpan.textContent = nameItem + " - " + cost + "$";
+  textSpan.textContent = newProduct.nazwa + " - " + newProduct.cena + "$";
   newElement.appendChild(textSpan);
+
   const actionsContainer = document.createElement("div");
   actionsContainer.className = "expense-actions";
+
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
   deleteButton.className = "delete-button";
@@ -65,34 +68,40 @@ function addItem() {
     newElement.remove();
     update();
   });
+
   const editButton = document.createElement("button");
   editButton.textContent = "edit";
   editButton.className = "edit-button";
   editButton.addEventListener("click", function () {
-    if (actionsContainer.querySelector("input")) {
-      return;
-    }
-    const editInput = document.createElement("input");
-    editInput.type = "text";
-    editInput.value = newProduct.nazwa + " - " + newProduct.cena + "$";
+    if (actionsContainer.querySelector("input")) return;
+
+    const editNameInput = document.createElement("input");
+    editNameInput.type = "text";
+    editNameInput.value = newProduct.nazwa;
+
+    const editCostInput = document.createElement("input");
+    editCostInput.type = "number";
+    editCostInput.value = newProduct.cena;
+
     const confirm = document.createElement("button");
     confirm.textContent = "confirm";
-    actionsContainer.appendChild(editInput);
+
+    actionsContainer.appendChild(editNameInput);
+    actionsContainer.appendChild(editCostInput);
     actionsContainer.appendChild(confirm);
+
     confirm.addEventListener("click", function () {
-      const userValue = editInput.value;
-      textSpan.textContent = userValue;
-      const foundProduct = products.find((p) => p.id === newProduct.id);
-      if (foundProduct) {
-        const parts = userValue.split(" - ");
-        if (parts.length === 2) {
-          foundProduct.nazwa = parts[0];
-          foundProduct.cena = parts[1].replace("$", "");
-        } else {
-          foundProduct.nazwa = userValue;
-        }
-      }
-      editInput.remove();
+      const newName = editNameInput.value;
+      const newCost = Number(editCostInput.value);
+
+      if (newName === "" || editCostInput.value === "") return;
+
+      newProduct.nazwa = newName;
+      newProduct.cena = newCost;
+      textSpan.textContent = newName + " - " + newCost + "$";
+
+      editNameInput.remove();
+      editCostInput.remove();
       confirm.remove();
       update();
     });
