@@ -36,9 +36,7 @@ function update() {
   products.forEach((product) => {
     suma += product.cena;
   });
-
   priceallp.innerHTML = "price of all products: " + suma + "$";
-
   const procent = currentBudget > 0 ? (suma / currentBudget) * 100 : 0;
   budgetPercentp.innerHTML = "Budget used: " + procent.toFixed(1) + "%";
 }
@@ -48,18 +46,14 @@ function addItem() {
   const cost = costProduct.value;
   if (!validateEmpty(nameItem, cost)) return;
   errorMessage.textContent = "";
-
   const newProduct = { id: Date.now(), nazwa: nameItem, cena: Number(cost) };
   products.push(newProduct);
-
   const newElement = document.createElement("li");
   const textSpan = document.createElement("span");
   textSpan.textContent = newProduct.nazwa + " - " + newProduct.cena + "$";
   newElement.appendChild(textSpan);
-
   const actionsContainer = document.createElement("div");
   actionsContainer.className = "expense-actions";
-
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
   deleteButton.className = "delete-button";
@@ -68,41 +62,40 @@ function addItem() {
     newElement.remove();
     update();
   });
-
   const editButton = document.createElement("button");
   editButton.textContent = "edit";
   editButton.className = "edit-button";
   editButton.addEventListener("click", function () {
-    if (actionsContainer.querySelector("input")) return;
-
+    if (newElement.querySelector(".edit-form")) return;
+    textSpan.style.display = "none";
+    actionsContainer.style.display = "none";
+    const editForm = document.createElement("div");
+    editForm.className = "edit-form";
     const editNameInput = document.createElement("input");
     editNameInput.type = "text";
+    editNameInput.className = "edit-input-name";
     editNameInput.value = newProduct.nazwa;
-
     const editCostInput = document.createElement("input");
     editCostInput.type = "number";
+    editCostInput.className = "edit-input-cost";
     editCostInput.value = newProduct.cena;
-
     const confirm = document.createElement("button");
     confirm.textContent = "confirm";
-
-    actionsContainer.appendChild(editNameInput);
-    actionsContainer.appendChild(editCostInput);
-    actionsContainer.appendChild(confirm);
-
+    confirm.className = "confirm-button";
+    editForm.appendChild(editNameInput);
+    editForm.appendChild(editCostInput);
+    editForm.appendChild(confirm);
+    newElement.appendChild(editForm);
     confirm.addEventListener("click", function () {
       const newName = editNameInput.value;
       const newCost = Number(editCostInput.value);
-
       if (newName === "" || editCostInput.value === "") return;
-
       newProduct.nazwa = newName;
       newProduct.cena = newCost;
       textSpan.textContent = newName + " - " + newCost + "$";
-
-      editNameInput.remove();
-      editCostInput.remove();
-      confirm.remove();
+      editForm.remove();
+      textSpan.style.display = "block";
+      actionsContainer.style.display = "flex";
       update();
     });
   });
@@ -111,7 +104,6 @@ function addItem() {
   actionsContainer.appendChild(editButton);
   newElement.appendChild(actionsContainer);
   list.appendChild(newElement);
-
   itemName.value = "";
   costProduct.value = "";
   update();
