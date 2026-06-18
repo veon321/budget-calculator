@@ -36,8 +36,8 @@ function update() {
   priceallp.innerHTML = "price of all products: " + suma + "$";
 }
 
-function edit() {
-  const editInput = document.createElement("input");
+function edit(element, text) {
+  element.innerHTML = text;
 }
 
 function addItem() {
@@ -65,15 +65,40 @@ function addItem() {
   editButton.textContent = "edit";
   editButton.className = "edit-button";
   editButton.addEventListener("click", function () {
-    products = products.filter((p) => p.id !== newProduct.id);
+    if (actionsContainer.querySelector("input")) {
+      return;
+    }
     const editInput = document.createElement("input");
+    editInput.type = "text";
+    editInput.value = newProduct.nazwa + " - " + newProduct.cena + "$";
+    const confirm = document.createElement("button");
+    confirm.textContent = "confirm";
     actionsContainer.appendChild(editInput);
-    edit();
+    actionsContainer.appendChild(confirm);
+    confirm.addEventListener("click", function () {
+      const userValue = editInput.value;
+      textSpan.textContent = userValue;
+      const foundProduct = products.find((p) => p.id === newProduct.id);
+      if (foundProduct) {
+        const parts = userValue.split(" - ");
+        if (parts.length === 2) {
+          foundProduct.nazwa = parts[0];
+          foundProduct.cena = parts[1].replace("$", "");
+        } else {
+          foundProduct.nazwa = userValue;
+        }
+      }
+      editInput.remove();
+      confirm.remove();
+      update();
+    });
   });
+
   actionsContainer.appendChild(deleteButton);
   actionsContainer.appendChild(editButton);
   newElement.appendChild(actionsContainer);
   list.appendChild(newElement);
+
   itemName.value = "";
   costProduct.value = "";
   update();
