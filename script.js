@@ -1,118 +1,177 @@
-const totalamount = document.getElementById("total-amount");
+const totalAmountInput = document.getElementById("total-amount");
 const setBudgetButton = document.getElementById("set-budget");
-const budgetp = document.getElementById("budget");
-const itemName = document.getElementById("title");
-const costProduct = document.getElementById("cost");
-const checkamountbutton = document.getElementById("check-amount");
-const list = document.getElementById("list");
+const budgetDisplay = document.getElementById("budget");
+const itemNameInput = document.getElementById("title");
+const costProductInput = document.getElementById("cost");
+const checkAmountButton = document.getElementById("check-amount");
+const expenseList = document.getElementById("list");
 const errorMessage = document.getElementById("error-message");
-const clearallbutton = document.getElementById("clearall");
-const priceallp = document.getElementById("priceall");
-const budgetPercentp = document.getElementById("budget-percent");
+const clearAllButton = document.getElementById("clearall");
+const priceAllDisplay = document.getElementById("priceall");
+const budgetPercentDisplay = document.getElementById("budget-percent");
 
 let products = [];
 let currentBudget = 0;
 
+function clearError() {
+  errorMessage.textContent = "";
+  errorMessage.className = "";
+}
+
 function setBudget() {
-  currentBudget = Number(totalamount.value);
-  budgetp.innerHTML = "budget: " + currentBudget + "$";
-  totalamount.value = "";
-  update();
+  const budgetValue = Number(totalAmountInput.value);
+
+  if (budgetValue <= 0 || isNaN(budgetValue)) {
+    errorMessage.textContent = "Please enter a valid budget greater than 0!";
+    errorMessage.className = "error-text";
+    return;
+  }
+
+  clearError();
+  currentBudget = budgetValue;
+  budgetDisplay.textContent = "Budget: " + currentBudget + "$";
+  totalAmountInput.value = "";
+  updateSummary();
 }
 setBudgetButton.addEventListener("click", setBudget);
 
-function validateEmpty(nameItem, cost) {
-  if (nameItem === "" || cost === "") {
+function validateProductInputs(nameItem, cost) {
+  if (nameItem.trim() === "" || cost === "") {
     errorMessage.textContent =
       "Please complete both fields before adding a product!";
+    errorMessage.className = "error-text";
+    return false;
+  }
+  if (Number(cost) <= 0) {
+    errorMessage.textContent = "The price must be greater than 0!";
     errorMessage.className = "error-text";
     return false;
   }
   return true;
 }
 
-function update() {
-  let suma = 0;
+function updateSummary() {
+  let totalSum = 0;
   products.forEach((product) => {
-    suma += product.cena;
+    totalSum += product.price;
   });
-  priceallp.innerHTML = "price of all products: " + suma + "$";
-  const procent = currentBudget > 0 ? (suma / currentBudget) * 100 : 0;
-  budgetPercentp.innerHTML = "Budget used: " + procent.toFixed(1) + "%";
+
+  priceAllDisplay.textContent = "Price of all products: " + totalSum + "$";
+
+  const percentage = currentBudget > 0 ? (totalSum / currentBudget) * 100 : 0;
+  budgetPercentDisplay.textContent =
+    "Budget used: " + percentage.toFixed(1) + "%";
 }
 
 function addItem() {
-  const nameItem = itemName.value;
-  const cost = costProduct.value;
-  if (!validateEmpty(nameItem, cost)) return;
-  errorMessage.textContent = "";
-  const newProduct = { id: Date.now(), nazwa: nameItem, cena: Number(cost) };
+  const nameItem = itemNameInput.value;
+  const cost = costProductInput.value;
+
+  if (!validateProductInputs(nameItem, cost)) return;
+  clearError();
+
+  const newProduct = {
+    id: Date.now(),
+    name: nameItem,
+    price: Number(cost),
+  };
   products.push(newProduct);
+
   const newElement = document.createElement("li");
+
   const textSpan = document.createElement("span");
-  textSpan.textContent = newProduct.nazwa + " - " + newProduct.cena + "$";
+  textSpan.textContent = newProduct.name + " - " + newProduct.price + "$";
   newElement.appendChild(textSpan);
+
   const actionsContainer = document.createElement("div");
   actionsContainer.className = "expense-actions";
+
   const deleteButton = document.createElement("button");
   deleteButton.textContent = "X";
   deleteButton.className = "delete-button";
   deleteButton.addEventListener("click", function () {
     products = products.filter((p) => p.id !== newProduct.id);
     newElement.remove();
-    update();
+    updateSummary();
   });
+
   const editButton = document.createElement("button");
   editButton.textContent = "edit";
   editButton.className = "edit-button";
   editButton.addEventListener("click", function () {
     if (newElement.querySelector(".edit-form")) return;
+
     textSpan.style.display = "none";
     actionsContainer.style.display = "none";
+
     const editForm = document.createElement("div");
     editForm.className = "edit-form";
+
     const editNameInput = document.createElement("input");
     editNameInput.type = "text";
-    editNameInput.className = "edit-input-name";
-    editNameInput.value = newProduct.nazwa;
+    editNameInput.value = newProduct.name;
+
     const editCostInput = document.createElement("input");
     editCostInput.type = "number";
-    editCostInput.className = "edit-input-cost";
-    editCostInput.value = newProduct.cena;
-    const confirm = document.createElement("button");
-    confirm.textContent = "confirm";
-    confirm.className = "confirm-button";
+    editCostInput.value = newProduct.price;
+
+    const confirmButton = document.createElement("button");
+    confirmButton.textContent = "confirm";
+    confirmButton.className = "confirm-button";
+
+    const cancelButton = document.createElement("button");
+    cancelButton.textContent = "cancel";
+    cancelButton.className = "cancel-button";
+
     editForm.appendChild(editNameInput);
     editForm.appendChild(editCostInput);
-    editForm.appendChild(confirm);
+    editForm.appendChild(confirmButton);
+    editForm.appendChild(cancelButton);
     newElement.appendChild(editForm);
-    confirm.addEventListener("click", function () {
+
+    confirmButton.addEventListener("click", function () {
       const newName = editNameInput.value;
       const newCost = Number(editCostInput.value);
-      if (newName === "" || editCostInput.value === "") return;
-      newProduct.nazwa = newName;
-      newProduct.cena = newCost;
+
+      if (newName.trim() === "" || isNaN(newCost) || newCost <= 0) {
+        alert("Please enter valid product details!");
+        return;
+      }
+
+      newProduct.name = newName;
+      newProduct.price = newCost;
       textSpan.textContent = newName + " - " + newCost + "$";
+
+      closeEditMode();
+      updateSummary();
+    });
+
+    cancelButton.addEventListener("click", closeEditMode);
+
+    function closeEditMode() {
       editForm.remove();
       textSpan.style.display = "block";
       actionsContainer.style.display = "flex";
-      update();
-    });
+    }
   });
 
-  actionsContainer.appendChild(deleteButton);
   actionsContainer.appendChild(editButton);
+  actionsContainer.appendChild(deleteButton);
   newElement.appendChild(actionsContainer);
-  list.appendChild(newElement);
-  itemName.value = "";
-  costProduct.value = "";
-  update();
-}
-checkamountbutton.addEventListener("click", addItem);
+  expenseList.appendChild(newElement);
 
-function clearall() {
-  products = [];
-  list.innerHTML = "";
-  update();
+  itemNameInput.value = "";
+  costProductInput.value = "";
+  itemNameInput.focus();
+
+  updateSummary();
 }
-clearallbutton.addEventListener("click", clearall);
+checkAmountButton.addEventListener("click", addItem);
+
+function clearAll() {
+  products = [];
+  expenseList.innerHTML = "";
+  clearError();
+  updateSummary();
+}
+clearAllButton.addEventListener("click", clearAll);
