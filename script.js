@@ -10,12 +10,17 @@ const clearAllButton = document.getElementById("clearall");
 const priceAllDisplay = document.getElementById("priceall");
 const budgetPercentDisplay = document.getElementById("budget-percent");
 
-let products = [];
-let currentBudget = 0;
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let currentBudget = Number(localStorage.getItem("currentBudget")) || 0;
 
 function clearError() {
   errorMessage.textContent = "";
   errorMessage.className = "";
+}
+
+function saveToLocalStorage() {
+  localStorage.setItem("products", JSON.stringify(products));
+  localStorage.setItem("currentBudget", currentBudget.toString());
 }
 
 function setBudget() {
@@ -31,6 +36,7 @@ function setBudget() {
   currentBudget = budgetValue;
   budgetDisplay.textContent = "Budget: " + currentBudget + "$";
   totalAmountInput.value = "";
+  saveToLocalStorage();
   updateSummary();
 }
 setBudgetButton.addEventListener("click", setBudget);
@@ -61,26 +67,21 @@ function updateSummary() {
   const percentage = currentBudget > 0 ? (totalSum / currentBudget) * 100 : 0;
   budgetPercentDisplay.textContent =
     "Budget used: " + percentage.toFixed(1) + "%";
+
+  if (percentage > 100) {
+    budgetPercentDisplay.style.color = "red";
+    budgetPercentDisplay.style.fontWeight = "bold";
+  } else {
+    budgetPercentDisplay.style.color = "";
+    budgetPercentDisplay.style.fontWeight = "";
+  }
 }
 
-function addItem() {
-  const nameItem = itemNameInput.value;
-  const cost = costProductInput.value;
-
-  if (!validateProductInputs(nameItem, cost)) return;
-  clearError();
-
-  const newProduct = {
-    id: Date.now(),
-    name: nameItem,
-    price: Number(cost),
-  };
-  products.push(newProduct);
-
+function createDOMElement(product) {
   const newElement = document.createElement("li");
 
   const textSpan = document.createElement("span");
-  textSpan.textContent = newProduct.name + " - " + newProduct.price + "$";
+  textSpan.textContent = product.name + " - " + product.price + "$";
   newElement.appendChild(textSpan);
 
   const actionsContainer = document.createElement("div");
@@ -90,8 +91,9 @@ function addItem() {
   deleteButton.textContent = "X";
   deleteButton.className = "delete-button";
   deleteButton.addEventListener("click", function () {
-    products = products.filter((p) => p.id !== newProduct.id);
+    products = products.filter((p) => p.id !== product.id);
     newElement.remove();
+    saveToLocalStorage();
     updateSummary();
   });
 
@@ -109,11 +111,11 @@ function addItem() {
 
     const editNameInput = document.createElement("input");
     editNameInput.type = "text";
-    editNameInput.value = newProduct.name;
+    editNameInput.value = product.name;
 
     const editCostInput = document.createElement("input");
     editCostInput.type = "number";
-    editCostInput.value = newProduct.price;
+    editCostInput.value = product.price;
 
     const confirmButton = document.createElement("button");
     confirmButton.textContent = "confirm";
@@ -138,11 +140,12 @@ function addItem() {
         return;
       }
 
-      newProduct.name = newName;
-      newProduct.price = newCost;
+      product.name = newName;
+      product.price = newCost;
       textSpan.textContent = newName + " - " + newCost + "$";
 
       closeEditMode();
+      saveToLocalStorage();
       updateSummary();
     });
 
@@ -159,19 +162,51 @@ function addItem() {
   actionsContainer.appendChild(deleteButton);
   newElement.appendChild(actionsContainer);
   expenseList.appendChild(newElement);
+}
+
+function addItem() {
+  const nameItem = itemNameInput.value;
+  const cost = costProductInput.value;
+
+  if (!validateProductInputs(nameItem, cost)) return;
+  clearError();
+
+  const newProduct = {
+    id: Date.now(),
+    name: nameItem,
+    price: Number(cost),
+  };
+  products.push(newProduct);
+
+  createDOMElement(newProduct);
 
   itemNameInput.value = "";
   costProductInput.value = "";
   itemNameInput.focus();
 
+  saveToLocalStorage();
   updateSummary();
 }
 checkAmountButton.addEventListener("click", addItem);
 
 function clearAll() {
   products = [];
+  currentBudget = 0;
   expenseList.innerHTML = "";
+  budgetDisplay.textContent = "Budget: 0$";
   clearError();
+  saveToLocalStorage();
   updateSummary();
 }
 clearAllButton.addEventListener("click", clearAll);
+
+function init() {
+  if (currentBudget > 0) {
+    budgetDisplay.textContent = "Budget: " + currentBudget + "$";
+  }
+  products.forEach((product) => {
+    createDOMElement(product);
+  });
+  updateSummary();
+}
+init();
