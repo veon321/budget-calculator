@@ -149,3 +149,28 @@ main {
 .expense-container .edit-button:hover {
   background-color: rgba(75, 75, 224, 0.863);
 }
+
+@media (max-width: 600px) {
+  main {
+    padding: 20px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .first-containers {
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .budget-total,
+  .expenses,
+  .expense-container {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .expense-container {
+    margin-top: 0;
+  }
+}
