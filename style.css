@@ -146,6 +146,11 @@ main {
   border-radius: 4px;
 }
 
+.edit-form {
+  display: flex;
+  gap: 10px;
+}
+
 .expense-container .edit-button:hover {
   background-color: rgba(75, 75, 224, 0.863);
 }
