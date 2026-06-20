@@ -17,6 +17,7 @@
               type="number"
               id="total-amount"
               name="total-amount"
+              min="0"
               placeholder="Enter Total Amount"
             />
             <button type="button" class="set-budget" id="set-budget">
@@ -35,6 +36,7 @@
               type="number"
               id="cost"
               class="text-input"
+              min="0"
               placeholder="Enter Cost of Product"
             />
             <small class="error-text" id="error-message"></small>
@@ -49,8 +51,10 @@
           <p id="priceall">price of all products: 0$</p>
           <p id="budget-percent">Budget used: 0%</p>
           <ul id="list"></ul>
+          <button type="button" id="clearall" class="clearall">
+            Clear all
+          </button>
         </div>
-        <button type="button" id="clearall" class="clearall">Clear all</button>
       </div>
     </main>
     <script src="script.js"></script>
