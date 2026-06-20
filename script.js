@@ -197,6 +197,8 @@ function addItem() {
 checkAmountButton.addEventListener("click", addItem);
 
 function clearAll() {
+  if (products.length === 0 && currentBudget === 0) return;
+
   if (!confirm("Are you sure you want to clear all data?")) return;
 
   products = [];
