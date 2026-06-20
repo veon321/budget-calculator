@@ -150,56 +150,6 @@ main {
   background-color: rgba(75, 75, 224, 0.863);
 }
 
-.edit-form {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  align-items: center;
-}
-
-.edit-form input {
-  padding: 5px 8px;
-  border-radius: 6px;
-  border: 1px solid rgba(37, 37, 39, 0.24);
-  outline: none;
-  font-size: 0.9rem;
-}
-
-.edit-form input[type="text"] {
-  flex: 2;
-  width: 100%;
-}
-
-.edit-form input[type="number"] {
-  flex: 1;
-  width: 70px;
-}
-
-.edit-form button {
-  cursor: pointer;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  color: white;
-  font-size: 0.85rem;
-}
-
-.confirm-button {
-  background-color: #2e7d32;
-}
-
-.confirm-button:hover {
-  background-color: #1b5e20;
-}
-
-.cancel-button {
-  background-color: #757575;
-}
-
-.cancel-button:hover {
-  background-color: #616161;
-}
-
 @media (max-width: 600px) {
   main {
     padding: 20px;
@@ -222,15 +172,5 @@ main {
 
   .expense-container {
     margin-top: 0;
-  }
-
-  .edit-form {
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .edit-form input[type="number"],
-  .edit-form button {
-    width: 100%;
   }
 }
