@@ -11,7 +11,10 @@ const priceAllDisplay = document.getElementById("priceall");
 const budgetPercentDisplay = document.getElementById("budget-percent");
 
 let products = JSON.parse(localStorage.getItem("products")) || [];
-let currentBudget = Number(localStorage.getItem("currentBudget")) || 0;
+let currentBudget =
+  localStorage.getItem("currentBudget") !== null
+    ? Number(localStorage.getItem("currentBudget"))
+    : 0;
 
 function clearError() {
   errorMessage.textContent = "";
@@ -26,8 +29,12 @@ function saveToLocalStorage() {
 function setBudget() {
   const budgetValue = Number(totalAmountInput.value);
 
-  if (budgetValue <= 0 || isNaN(budgetValue)) {
-    errorMessage.textContent = "Please enter a valid budget greater than 0!";
+  if (
+    budgetValue < 0 ||
+    isNaN(budgetValue) ||
+    totalAmountInput.value.trim() === ""
+  ) {
+    errorMessage.textContent = "Please enter a valid budget!";
     errorMessage.className = "error-text";
     return;
   }
@@ -48,7 +55,7 @@ function validateProductInputs(nameItem, cost) {
     errorMessage.className = "error-text";
     return false;
   }
-  if (Number(cost) <= 0) {
+  if (Number(cost) <= 0 || isNaN(Number(cost))) {
     errorMessage.textContent = "The price must be greater than 0!";
     errorMessage.className = "error-text";
     return false;
@@ -153,8 +160,8 @@ function createDOMElement(product) {
 
     function closeEditMode() {
       editForm.remove();
-      textSpan.style.display = "block";
-      actionsContainer.style.display = "flex";
+      textSpan.style.display = "";
+      actionsContainer.style.display = "";
     }
   });
 
@@ -190,6 +197,8 @@ function addItem() {
 checkAmountButton.addEventListener("click", addItem);
 
 function clearAll() {
+  if (!confirm("Are you sure you want to clear all data?")) return;
+
   products = [];
   currentBudget = 0;
   expenseList.innerHTML = "";
@@ -201,9 +210,8 @@ function clearAll() {
 clearAllButton.addEventListener("click", clearAll);
 
 function init() {
-  if (currentBudget > 0) {
-    budgetDisplay.textContent = "Budget: " + currentBudget + "$";
-  }
+  budgetDisplay.textContent = "Budget: " + currentBudget + "$";
+
   products.forEach((product) => {
     createDOMElement(product);
   });
