@@ -6,6 +6,7 @@ const costProductInput = document.getElementById("cost");
 const checkAmountButton = document.getElementById("check-amount");
 const expenseList = document.getElementById("list");
 const errorMessage = document.getElementById("error-message");
+const errorMessageBudget = document.getElementById("error-message-budget");
 const clearAllButton = document.getElementById("clearall");
 const priceAllDisplay = document.getElementById("priceall");
 const budgetPercentDisplay = document.getElementById("budget-percent");
@@ -34,8 +35,8 @@ function setBudget() {
     isNaN(budgetValue) ||
     totalAmountInput.value.trim() === ""
   ) {
-    errorMessage.textContent = "Please enter a valid budget!";
-    errorMessage.className = "error-text";
+    errorMessageBudget.textContent = "Please enter a valid budget!";
+    errorMessageBudget.className = "error-text";
     return;
   }
 
